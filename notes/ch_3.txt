@@ -24,3 +24,12 @@ git push heroku master # push to herkou
 heroku open # open the page in a browser
 
 If you have a problem reaching pages on the site locally, you can always check the locally running server. If you have problems with the remote site, run 'heroku logs'
+
+******************************* 3.2: Static Pages *****************************
+
+In this section, we will create a set of rails actions and views containing only static HTML. Rails actions are found in the controller, so we will be working mainly in the app/views and app/controllers directories.
+
+Anytime we are working on a project, it's a good idea to do our work on a separate topic branch, so do so with:
+
+git checkout -b static-pages
+
