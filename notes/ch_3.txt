@@ -1,0 +1,26 @@
+In Chapter 3, we begin making the sample app by making static pages in our rails app.
+
+******************** 3.1: Sample App Setup ************************ #
+
+To start a new rails project, and make sure it conforms to the same version of rails as the tutorial, we enter this command:
+
+rails _5.1.4_ new sample_app
+
+Once the application has been created, we edit the Gemfile to match up with the tutorial and then run:
+
+bundle install --without production
+***NOTE*** I get an error message and have to run bundle update, which has the same effect.
+
+The --without production flag ensures that we don't download the gems in the production group, which at this point comprises the gem for setting up the PostgreSQL database, which we will not be using for development but will be using for production. Later on, I should learn how to setup PostgreSQL on my development machine so that the development box matches the remote box.
+
+Newer versions of rails automatically make the new project a git repository, so make sure to commit often and push up to a remote repo.
+
+Having a good README file should be part of every project, for this app one is provided with the tutorial.
+
+Even though there is nothing to the project at this point, it is a good idea to also deploy to Heroku as often as possible, so setup a simple "Hello, World" in the application controller and point the root route to it and then create and deploy to heroku. Make sure to visit the site locally and on the web to ensure everything is working correctly.
+
+heroku create # create the project in heroku
+git push heroku master # push to herkou
+heroku open # open the page in a browser
+
+If you have a problem reaching pages on the site locally, you can always check the locally running server. If you have problems with the remote site, run 'heroku logs'
