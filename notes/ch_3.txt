@@ -98,3 +98,27 @@ will be called when we visit the /static_pages/home URL and any code in 'home' w
 ------------------------ 3.2.2: Custom Static Pages ---------------------------
 
 Rails views can contain static HTML, so let's customize the HTML in the home and help views.
+
+******************** 3.3: Getting Started with Testing ***********************
+
+Now that we have Home and Help pages, we can add an About page. When adding a new feature to our app, it is a good idea to incorporate automated testing to ensure that the changes are implemented correctly and don't break the application in any way. When you are always developing tests for each new feature, you will end up with a test suite that serves as a saftey net and somewhat docuemtns the source code. Tests can eventually lead to faster development time, since writing good tests should help weed out or at least pinpoint bugs as the development process drags on.
+
+There is debate over the use of Test Driven Development (TDD), which is a testing paridigm where you write the failing test first, and then write the application code to get the test to pass.
+
+Understanding why to test is important. Hartl discusses three main benefits to testing:
+
+1. Tests prevent against regressions, where a functioning feature stops working for some reason
+2. Tests allow for code to be refactored with greater confidence.
+3. Tests act as a client for the application code, helping to determine the codes design and interface with other parts of the system.
+
+Here are some suggested guidelines on when to test first (or test at all):
+
+- When a test is short compared to the app code it tests, write the test first
+- When the desired behavior isn't clear, write the app code first, then write tests to codify the result
+- Write tests of the security model first, since security should be a top priority
+- When you find a bug, write a test to reproduce it, then write the app code to fix it
+- Don't write tests for code that is likely to change a lot in the future (like HTML)
+- Write tests before refactoring, and focusing on testing error-prone code that is especially likely to break first.
+
+In practice, we will probably write testing code for the controller and model first, moving on to integration (testing across controller, model, view) testing later. Integration tests are the most powerful testing technique, as they can mimic how a user will interact with the application through a browser.
+
