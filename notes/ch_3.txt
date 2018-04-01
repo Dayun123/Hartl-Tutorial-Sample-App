@@ -51,4 +51,46 @@ Since we are using Git and a remote repo for version control, it's a good idea t
 
 `git add .`
 `git commit`
-`git push -u origin static_pages`
+
+# This command pushes the static-pages topic branch up to GitHub. Subsequent pushes can just be written as : `git push`
+`git push -u origin static-pages`
+
+We passed the controller name in CamelCase, but it creates a controller file in snake_case: StaticPages becomes static_pages_controller.rb. This is convention, you could pass snake_case to the controller and be fine.
+
+If you mess up when using the `rails generate` command, you can undo the action using the `rails destroy` command. These two commands cancel each other out:
+
+`rails generate controller StaticPages home help`
+`rails destroy controller StaticPages home help`
+
+The `rails generate controller` command issued earlier automatically edits the routes file (config/routes.rb) to correspond to the home and help actions we created along with the controller with the lines:
+
+get 'static_pages/home'
+get 'static_pages/help'
+
+The routes file defines the correspondence between URL's and the web pages they render, so the rule:
+
+get 'static_pages/home'
+
+Will map any GET request to the URL static_pages/home to the home action in the StaticPages controller.
+
+In HTTP, there are 4 fundamental request types:
+
+GET: To read a piece of data from the web
+POST: Used for creating data on the server (form submits)
+PATCH: Update a resource on the server
+DELETE: Destroy a resource on the server
+
+Web browsers are only capable of sending GET and POST requests, but rails has ways to mimic PATCH and DELETE requests. Taken together, these 4 request types are all you need to implment REST architecture, which is what Rails is based on.
+
+If we look at the static_pages_controller.rb file, we see the following line first:
+
+class StaticPagesController < ApplicationController
+
+This tells us that StaticPagesController is a Ruby class, and that it inherits (<) from the class ApplicationController. This means that even though the two methods (actions in Rails) of this class are empty, we get a fair amount of functionality inherited from the ApplicationController in them.
+
+In Rails, this method of the StaticPagesController:
+
+def home
+end
+
+will be called when we visit the /static_pages/home URL and any code in 'home' will be run, then Rails will render the view associated with the home action found in app/views/static_pages/home.html.erb.
