@@ -122,3 +122,17 @@ Here are some suggested guidelines on when to test first (or test at all):
 
 In practice, we will probably write testing code for the controller and model first, moving on to integration (testing across controller, model, view) testing later. Integration tests are the most powerful testing technique, as they can mimic how a user will interact with the application through a browser.
 
+----------------------- 3.3.1: Our First Test -----------------------------
+
+Rails generates controller tests when you run `rails generate controller` so we have tests for our home and help actions in test/controllers/static_pages_controller_test.rb. Here is the test for the home action of the static pages controller:
+
+test "should get home" do
+  get static_pages_home_url
+  assert_response :success
+end
+
+The above test says: "Let's get the Home page by issuing a GET request and then ensure that we recive a success (200) code in response."
+
+To ensure that our tests our passing thus far, run:
+
+`rails test`
