@@ -259,3 +259,20 @@ Exercises:
   - Now the tests should pass, so add another test to assert that the <title> tag is present and contains the correct text. This will fail, so you should add the 'provide' call at the top of the contact view:
     <% provide(:title, "Contact") %>
 
+# ------------------ 3.4.4: Setting the Root Route ----------------------- #
+
+Now that we have a few static pages, we can set the root route to point to the 'home' page and remove the 'hello' action and route:
+
+root 'static_pages#hello'
+
+Exercises:
+
+1. Adding the root route gives us a helper 'root_url' which we can use to test whether the code we have added is working correctly:
+
+test "should get root" do
+  get root_url
+  assert_response :success
+end
+
+2. Since we already had the root route defined, the test above should pass. Comment out the root route and run the test again to see it fail, the uncomment and run again to see it pass.
+
