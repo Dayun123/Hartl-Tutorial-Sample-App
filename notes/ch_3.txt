@@ -152,3 +152,33 @@ If we run the test suite with:
 
 It should fail (with error messages) and that is what we want
 
+------------------------- 3.3.3: Green ---------------------------------------
+
+Now that we have a failing test, we will use the failing tests error messages to guide us to a working about page. The first error message is:
+
+NameError: undefined local variable or method `static_pages_about_url'
+
+This tells us we don't have a URL helper for static_pages_about_url, so to create one we need to add a line to the routes file:
+
+get 'static_pages/about'
+
+That line will ensure that GET requests to /static_pages/about will be routed to the StaticPagesController's about action and will create URL and PATH helpers called: static_pages_about_url and static_pages_about_path.
+
+After adding the route to the routes file, we get a new error on running `rails test`:
+
+AbstractController::ActionNotFound: The action 'about' could not be found for StaticPagesController
+
+Again, the error tells us what we need to do, create an 'about' action in the StaticPagesController:
+
+def about
+end
+
+Running `rails test` again, we get another error:
+
+ActionController::UnknownFormat: StaticPagesController#about is missing a template for this request format and variant.
+
+This is telling us that there is no template for the #about action, which means we need a view at app/views/static_pages/about.html.erb:
+
+`touch app/views/static_pages/about.html.erb`
+
+We can fill in the view with the code provided on the tutorial, but the test will pass now that the view is present.
