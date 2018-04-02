@@ -136,3 +136,19 @@ The above test says: "Let's get the Home page by issuing a GET request and then 
 To ensure that our tests our passing thus far, run:
 
 `rails test`
+
+---------------------------- 3.3.2: Red --------------------------------------
+
+TDD involves writing a failing test first (red), writing the app code to get it to pass (green), and then refactoring the app code if neccessary. Since we want to add an about page, the code to test whether this page is working correctly will look very similar to the code for testing the home and help pages:
+
+test "should get about" do
+  get static_pages_about_url
+  assert_response :success
+end
+
+If we run the test suite with:
+
+`rails test`
+
+It should fail (with error messages) and that is what we want
+
