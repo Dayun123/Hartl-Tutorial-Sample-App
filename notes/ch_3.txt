@@ -197,3 +197,25 @@ Where [PageName] will be Home, About, and Help depending on which page we are on
 
 When we run the tests (`rails test`) they should fail, which is what we expect as this is the RED section of our TDD.
 
+# ------------------- 3.4.2: Adding Page Titles (Green) -------------------- #
+
+In this section, we apply the basic HTML structure to each page and add the appropriate <title> tag to reflect which page we are on.
+
+After adding the html structure and <title> tags, all tests will be green
+
+Exercises:
+
+1. There is some repetition in the static_pages_controller_test.rb file, where we are always testing that the second part of the title "Ruby on Rails Tutorial Sample App" is present. Using the 'setup' method and string interpolation, we can refactor these tests to use an instance variable that holds the second half of the title to make the tests more DRY.
+
+assert_select "title", "Home | Ruby on Rails Tutorial Sample App"
+
+becomes
+
+def setup
+  @base_title = "Ruby on Rails Tutorial Sample App"
+end
+
+assert_select "title", "Home | #{@base_title}"
+
+The 'setup' method will be run before each test, so we will have access to the instance variable @base_title in all of our tests.
+
