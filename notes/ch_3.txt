@@ -219,3 +219,43 @@ assert_select "title", "Home | #{@base_title}"
 
 The 'setup' method will be run before each test, so we will have access to the instance variable @base_title in all of our tests.
 
+# ************* 3.4.3: Layouts and Embedded Ruby (Refactor) ***************** #
+
+Right now, our views are purely static HTMl and suffer from a lot of duplication. We will use a layout file and some embedded Ruby to accomplish this goal.
+
+Since the pattern for the titles is the same on each page, we can create a variable to hold the page title using the 'provide' function and then insert the variable into the HTML document with the 'yield' function.
+
+<% provide(:title, "Home") %>
+<html>
+  <head>
+  <title><%= yield(:title) %> | Ruby on Rails Tutorial App</title>
+
+Since these are Ruby functions, they are executed in the HTML document using embedded Ruby. The <%  %> just executes the Ruby code inside while <%=  %> executes the code and inserts the result into the document.
+
+Running 'rails test' will show that the tests still pass, so we can replace all of the hard-coded titles with the 'provide' then 'yield' pattern shown above.
+
+Now, all of our pages have a very similar structure in the <head> of the document, and the only part that is different is the <body>. Rails comes with a special file located at app/views/layouts/application.html.erb which allows us to elminate the duplication between page layouts even further.
+
+In the application layout file, we replace the <title> tag with the <title> tag from the views that uses the 'yield' function. The <body> of the application layout file simply contains:
+
+<body>
+<%= yield %>
+</body>
+
+Which will insert the contents of whatever view page we are on into the body of the document.
+
+With this change in place, we can now remove the surrounding <html>, <head>, and <body> tags from our views and simply leave the call to 'provide' as the first line of each page, along with the body content.
+
+Exercises:
+
+1. Make a 'Contact'page for the app. First write tests, then get the tests to pass by writing the correct application code.
+
+  - First write the test to get the static_pages_contact_url, this will fail which means you need to add to following to the routes file:
+    get 'static_pages/contact'
+  - Next, the test will fail because there is no contact action in the static_pages_controller, so add a contact action:
+    def contact
+    end
+  - Next, the test will fail because there is no associated view with the Contact page, so copy the HTML code from the tutorial and insert into a file call app/views/static_pages/contact.html.erb
+  - Now the tests should pass, so add another test to assert that the <title> tag is present and contains the correct text. This will fail, so you should add the 'provide' call at the top of the contact view:
+    <% provide(:title, "Contact") %>
+
