@@ -187,3 +187,13 @@ We can fill in the view with the code provided on the tutorial, but the test wil
 
 In this section, we will add a title to each page that changes depending on the page we are on, making our static pages slightly dynamic. The browser will display the title tag at the top of the webpage, and this is also important for SEO. We will use the Red, Green, Refactor cycle, first writing failing tests (red), then adding title tags to all three pages (green), and finally using a layout file to eliminate dupliaction (refactor).
 
+# ---------------------- 3.4.1: Testing Titles (Red) ------------------------ #
+
+Titles for webpages appear in the 'head' section of the html document and inside a <title> tag. In order to test for the presence of the <title> tag and to verify it contains the right content, we need to add the following line to each of our tests:
+
+assert select "title", "[PageName] | Ruby on Rails Tutorial Sample App"
+
+Where [PageName] will be Home, About, and Help depending on which page we are on. The assert_select method checks that the html document contains the given selector (title in our case), and that the content of that selector is the content that appears as the second parameter.
+
+When we run the tests (`rails test`) they should fail, which is what we expect as this is the RED section of our TDD.
+
