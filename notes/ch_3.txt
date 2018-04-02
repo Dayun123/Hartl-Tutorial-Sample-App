@@ -182,3 +182,8 @@ This is telling us that there is no template for the #about action, which means 
 `touch app/views/static_pages/about.html.erb`
 
 We can fill in the view with the code provided on the tutorial, but the test will pass now that the view is present.
+
+# ************************* 3.4: Slightly Dynamic Pages ********************* #
+
+In this section, we will add a title to each page that changes depending on the page we are on, making our static pages slightly dynamic. The browser will display the title tag at the top of the webpage, and this is also important for SEO. We will use the Red, Green, Refactor cycle, first writing failing tests (red), then adding title tags to all three pages (green), and finally using a layout file to eliminate dupliaction (refactor).
+
