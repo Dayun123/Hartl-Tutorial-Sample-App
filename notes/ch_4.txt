@@ -1,0 +1,66 @@
+In this chapter we explore some elements of the Ruby programming language.
+
+# ********************* 4.1.1 Built-in Helpers **************************** #
+
+In our app/layouts/application.html.erb file, the following line is present:
+
+<%= stylesheet_link_tag 'application', media: 'all',
+                                      'data-turbolinks-track': 'reload' %>
+
+There are 4 Ruby ideas in this line:
+1.  Built-in Rails methods = stylesheet_link_tag
+2.  Method invocation with missing parens =
+
+      stylesheet_link_tag('application', media: 'all',
+                                      'data-turbolinks-track': 'reload')
+
+      stylesheet_link_tag 'application', media: 'all',
+                                      'data-turbolinks-track': 'reload'
+
+3.  Symbols = media: (ends in colon)
+4.  Hashes
+
+      media: 'all', 'data-turbolinks-track': 'reload'
+     {media: 'all', 'data-turbolinks-track': 'reload'}
+
+# ********************* 4.1.2: Custom Helpers *************************** #
+
+Rails comes with many built-in helpers for views, but also allows the creation of new ones, called 'helpers'.
+
+In our app/layouts/application.html.erb file, we have this code in the <title> tag:
+
+  <%= yield(:title) %> | Ruby on Rails Tutorial Sample App
+
+Which relies on a call to 'provide' in each of our views:
+
+  <% provide(:title, "Home") %>
+
+And renders the following HTML
+
+  <title>Home | Ruby on Rails Tutorial Sample App</title>
+
+But, if we leave out the call to 'provide' in a page's view template file, the title will be rendered like so:
+
+  <title>| Ruby on Rails Tutorial Sample App</title>
+
+Notice the leading '|' character.
+
+It would be nice to have an appropriate base title that is displayed if no :title variable is present from a call to 'provide'. We can create a custom helper called full_title in app/helpers/application_helper.rb to do just that.
+
+Once the helper is created, we can use it in our layout file by replacing:
+
+  <title><%= yeild(:title) %> | Ruby on Rails Tutorial Sample App</title>
+
+with:
+
+  <title><%= full_title(yeild(:title)) %></title>
+
+Let's put this helper to work by getting rid of the "Home" page_title in the home.html.erb template. First, we need to rewrite the test condition to test for:
+
+  assert_selector "title", "#{@base_title}"
+
+instead of:
+
+  assert_selector "title", "Home | #{@base_title}"
+
+
