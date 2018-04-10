@@ -63,4 +63,254 @@ instead of:
 
   assert_selector "title", "Home | #{@base_title}"
 
+# ********************* 4.2: String Methods *************************** #
+
+One of the principle tools for working with Ruby on the command line is irb, and since we are focusing on Rails-flavored Ruby we will use the Rails console to experiment with different Ruby functionality.
+
+I'm using irb-tools/more, but the tutorial has you edit the .irbrc file to setup some specific settings. To run the console, type: `rails console`
+
+The console starts in a development environment by default (as opposed to production or test).
+
+# ********************** 4.2.1: Comments ****************************** #
+
+Comments in Ruby are represented by the '#' character. Anything after that character is not processed by the Ruby interpreter.
+
+# ********************* 4.2.2: Strings ******************************** #
+
+Strings are one of the most important data structures in a web application since most of the information sent from web pages to the server is sent as Strings. Here are some String literals:
+
+""
+"foo"
+"puppy"
+
+Here is a method to 'add' two strings together, called concatenation:
+
+"foo" + "bar"     #=> "foobar"
+"cat" + "burgler" #=> "catburgler"
+
+You can also build up strings using interpolation:
+
+first_name = "Daniel"
+"#{first_name} Schroeder" #=> "Daniel Schroeder"
+last_name = "Schroeder"
+"#{first_name} #{last_name}" #=> "Daniel Schroeder"
+
+To print a string to the screen, you can use 'puts' or 'print', the only difference is whether a newline is added after the text:
+
+>> puts "foo" #=> nil
+foo
+>> print "foo"    #=> nil
+foo>>
+
+Ruby supports single and double-qoutoed strings, the only difference being that single-quoted strings don't support interpolation:
+
+>> first_name = "Daniel" #=> "Daniel"
+>> "#{first_name} Schroeder" #=> "Daniel Schroeder"
+>> '#{first_name} Schroeder' #=> "\#{first_name} Schroeder"
+
+Notice also that the single-quoted string version used the backslash escape character to escape the # symbol.
+
+Exercises:
+
+1. Assign varibales city and state to your current residence:
+
+>> city = "New Orleans" #=> "New Orleans"
+>> state = "LA" #=> "LA"
+
+2. Using interpolation, print a string consisting of the city and state separated by a comma and space, as in Los Angeles, CA:
+
+>> puts "#{city}, #{state}" #=> nil
+New Orleans, LA
+
+3. Repeate the previous exercise but with the city and state separated by a tab character:
+
+>> puts "#{city}\t#{state}" #=> nil
+New Orleans LA
+
+4. What is the result if you replace double quotes with single quotes in the previous exercise?
+
+>> puts '#{city}\t#{state}' #=> nil
+#{city}\t#{state}
+
+# ***************** 4.2.3: Objects and Message Passing ********************* #
+
+Everything in Ruby is an object, and all objects do things by responding to messages. For example, String objects respond to the .length message:
+
+"foobar".length #=> 6
+
+The messages that get passed to objects are 'methods' of those objects. Strings respond to other messages besides .length, like .empty? :
+
+>> "".empty? #=> true
+>> "hello".empty? #=> false
+
+The question mark at the end of .empty? is a Ruby convention for signfiying that this method returns a boolean value, and these values are especially useful in control flow statements:
+
+>> s = "foobar" #=> "foobar"
+>> if s.empty?
+>>   puts "The string is empty"
+>> else
+>>   puts "The string is not empty"
+>> end #=> nil
+The string is not empty
+
+You can also use elsif for multiple conditions:
+
+>> if s.nil?
+>>   puts "The string is nil"
+>> elsif s.empty?
+>>   puts "The string is empty"
+>> elsif s.include?("foo")
+>>   puts "The string includes foo"
+>> end #=> nil
+The string includes foo
+
+You can combine booleans with the &&, ||, and ! operators:
+
+>> x = "foo" #=> "foo"
+>> y = "" #=> ""
+>> puts "Both strings are empty" if x.empty? && y.empty? #=> nil
+>> puts "One string is empty" if x.empty? || y.empty? #=> nil
+One string is empty
+>> puts "x is not empty" if !x.empty?
+x is not empty
+
+Since everything in Ruby is an object that can respond to methods, if follows that nil is also an object that can respond to methods:
+
+>> nil.to_s #=> ""
+
+We can chain messages together like so:
+
+>> nil.to_s.empty? #=> true
+
+You can use the .nil? method to test for nil-ness:
+
+>> "foo".nil? #=> false
+>> "".nil? #=> false
+>> false.nil? #=> false
+>> nil.nil? #=> true
+
+In addition to 'if', Ruby supports the opposite 'unless' statement:
+
+>> s = "foo" #=> "foo"
+>> puts "s is empty" if s.empty? #=> nil
+>> puts "s is not empty" unless s.empty? #=> nil
+s is not empty
+
+nil is the only object that is false in a boolean context besides 'false' itself. You can test this by using !!, which negates an object twice therefore yielding its boolean value.
+
+>> !!nil #=> false
+>> !!0   #=> true
+
+Notice that 0 is actually true in Ruby, as opposed to many other languages.
+
+Exercises:
+
+1. What is the length of the string "racecar"?
+
+>> "racecar".length #=> 7
+
+2. Confirm using the reverse method that the string from the previous exercise is the same when its reversed:
+
+>> "racecar".reverse #=> "racecar"
+
+3. Assign the string "racecar" to the variable s. Confirm using the comparison operator that s and s.reverse are equal:
+
+>> s = "racecar" #=> "racecar"
+>>
+>> puts "s and s.reverse are equal" if s.reverse == s #=> nil
+s and s.reverse are equal
+
+4. What is the result of running this code?
+
+>> s = "racecar" #=> "racecar"
+>> puts "It's a palindrome" if s == s.reverse #=> nil
+
+Answer:
+It's a palindrome
+
+4 (continued). How does it change if you reassign 's' to onomatopoeia?
+
+>> s = "onomotopoeia" #=> "onomotopoeia"
+>> puts "It's a palindrome" if s == s.reverse #=> nil
+
+
+# ******************** 4.2.4: Method Definitions ************************* #
+
+We can define methods in the console, although it is a bit cumbersome. Let's define a method that takes a single argument and returns a message based on whether or not the string is empty:
+
+>> def string_message(str = '')
+>>   if str.empty?
+>>     "It's an empty string"
+>>   else
+>>     "The string is non-empty"
+>>   end
+>> end
+=> :string_message
+>> puts string_message("hello")
+The string is non-empty
+=> nil
+>> puts string_message("")
+It's an empty string
+=> nil
+>> puts string_message()
+It's an empty string
+=> nil
+
+As we can see from the final example, it's possible to leave the argument to string_message out entirely because we made the argument a default argument with the line:
+
+def string_message(str = '')
+
+Ruby functions have implicit returns, meaning they return the last statement evaluated, but they can have explicity returns as well:
+
+>> def string_message_explicit(str = '')
+>>   return "The string is empty" if str.empty?
+>>   return "The string is not empty"
+>> end
+=> :string_message_explicit
+>> puts string_message_explicit("hello")
+The string is not empty
+=> nil
+>> puts string_message_explicit("")
+The string is empty
+=> nil
+
+Exercises:
+
+1. Define a method for testing palindromes that prints "It's a palindrome" or "It's not a palindrome":
+
+>> def palindrome_tester(s)
+>>   if s.reverse == s
+>>     puts "It's a palindrome"
+>>   else
+>>     puts "It's not a palindrome"
+>>   end
+>> end
+
+2. By running your palindrome_tester on 'racecare' and 'onomatopoeia' confirm that the first is a palindrome and the second is not.
+
+>> palindrome_tester('racecar')
+It's a palindrome
+=> nil
+>> palindrome_tester('onomatopoeia')
+It's not a palindrome
+=> nil
+
+3. Call the .nil? method on the palindrome_tester('racecar') call and confirm that the method returns nil. This is because the last statement evaluated is a 'puts' call, and 'puts' returns nil.
+
+>> palindrome_tester('racecar').nil?
+It's a palindrome
+=> true
+
+# ***************** 4.2.5: Back to the Title Helper ************************ #
+
+We can now understand all the elements of the title_helper we made earlier, except the 'Module' keyword. Modules give us a way to package some new functionality into a class, usually by using the 'include' keyword in the class that we want to contain the Module in. Rails takes care of this part for us, so any methods we define in the ApplicationHelper module are packaged in to our app.
+
+
+
+
+
+
+
+
+
 
