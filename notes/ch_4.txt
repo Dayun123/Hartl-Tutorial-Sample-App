@@ -305,6 +305,181 @@ It's a palindrome
 
 We can now understand all the elements of the title_helper we made earlier, except the 'Module' keyword. Modules give us a way to package some new functionality into a class, usually by using the 'include' keyword in the class that we want to contain the Module in. Rails takes care of this part for us, so any methods we define in the ApplicationHelper module are packaged in to our app.
 
+# ******************* 4.3: Other Data Structures ************************ #
+
+Web apps are ultimately concerned with strings, but there are other data structures that come into play when creating those strings, and those data structures will be the focus of this section.
+
+# ********************** 4.3.1: Arrays and Ranges *********************** #
+
+An array is just a list of elements in a particular order. Since we have been talking about strings, let's convert a string to an array using the .split method:
+
+>> "foo bar baz".split
+=> ["foo", "bar", "baz"]
+
+.split divides a string into an array by splitting the parameter supplied, or whitespace if no param is supplied. Here, we are splitting on the character 'x':
+
+>> "fooxbarxbazx".split('x')
+=> ["foo", "bar", "baz"]
+
+Arrays in Ruby, as in most languages, are zero-offset, meaning the first element can be accessed by arr[0]:
+
+=> ["foo", "bar", "baz"]
+>> arr = [54, 1, 17]
+=> [54, 1, 17]
+>> arr[0]
+=> 54
+>> arr[1]
+=> 1
+>> arr[2]
+=> 17
+>> arr[-1]
+=> 17
+
+Notice that negative indicies are allowed as well.
+
+In addition to bracket notation, Ruby offers several methods that provide access to common array elements:
+
+>> arr
+=> [54, 1, 17]
+>> arr.first
+=> 54
+>> arr[0]
+=> 54
+>> arr.last
+=> 17
+>> arr[-1]
+=> 17
+>> arr.last == arr[-1]
+=> true
+>> arr.first == arr[0]
+=> true
+
+Arrays respond to many methods, just like strings. Here are a few:
+
+>> arr
+=> [54, 1, 17]
+>> arr.length
+=> 3
+>> arr.include?(54)
+=> true
+>> arr.empty?
+=> false
+>> arr.shuffle
+=> [1, 17, 54]
+>> arr.sort
+=> [1, 17, 54]
+>> arr
+=> [54, 1, 17]
+
+Note that none of the methods change the array itself, if you want to do that use the corresponding ! (bang) methods:
+
+>> arr
+=> [54, 1, 17]
+>> arr.sort!
+=> [1, 17, 54]
+>> arr
+=> [1, 17, 54]
+>> arr.shuffle!
+=> [54, 17, 1]
+>> arr
+=> [54, 17, 1]
+
+You can also add to arrays with the .push method or the equivalent << (shovel) operator:
+
+>> arr
+=> [54, 17, 1]
+>> arr.push(6)
+=> [54, 17, 1, 6]
+>> arr << 99
+=> [54, 17, 1, 6, 99]
+>> arr << "hello" << "steve"
+=> [54, 17, 1, 6, 99, "hello", "steve"]
+
+The last examples shows how you can chain multiple << together, and also how arrays in Ruby can contain mixed data types.
+
+We saw that .split converts strings to arrays, but you can go the other way as well and convert an array to a string using .join:
+
+>> arr
+=> [54, 17, 1, 6, 99, "hello", "steve"]
+>> arr.join
+=> "54171699hellosteve"
+>> arr.join(', ')
+=> "54, 17, 1, 6, 99, hello, steve"
+
+The parameter you pass to .join will be what the elements of the array are joined with.
+
+Ranges are closely related to arrays, and they are most easily understood by converting them to arrays with the .to_a method:
+
+>> 0..9
+=> 0..9
+>> 0..9.to_a
+Traceback (most recent call last):
+        1: from (irb):42
+NoMethodError (undefined method `to_a' for 9:Integer)
+>> (0..9).to_a
+=> [0, 1, 2, 3, 4, 5, 6, 7, 8, 9]
+
+Notice how you must surround the range with () in order to call methods on the array.
+
+You can use ranges to select a number of elements from an array:
+
+>> arr = %w[foo bar baz quix]
+=> ["foo", "bar", "baz", "quix"]
+>> arr[0..2]
+=> ["foo", "bar", "baz"]
+
+Notice that we can also use the %w notation to convert the string [foo bar baz quix] into an array.
+
+A useful trick with ranges is to use -1 as the last number of the range to select every element of an array from the start of the range to the end of the array:
+
+>> arr = (0..9).to_a
+=> [0, 1, 2, 3, 4, 5, 6, 7, 8, 9]
+>> arr[2..(arr.length - 1)]
+=> [2, 3, 4, 5, 6, 7, 8, 9]
+>> arr[2..-1]
+=> [2, 3, 4, 5, 6, 7, 8, 9]
+
+Ranges also work with characters:
+
+>> ('a'..'e').to_a
+=> ["a", "b", "c", "d", "e"]
+
+Exercises:
+
+1. Assign arr to be the result of splitting the string "A man, a plan, a canal, Panama" on comma-space.
+
+>> arr = "A man, a plan, a canal, Panama".split(', ')
+=> ["A man", "a plan", "a canal", "Panama"]
+
+2. Assign str to be the string resulting from joining arr to nothing:
+
+>> str = arr.join
+=> "A mana plana canalPanama"
+
+3. Split str on whitespace and rejoin on nothing. Use the palindrome test to determine that the string is not a palindrome in it's current state, but is when it is run through the .downcase method:
+
+>> str = str.split.join
+=> "AmanaplanacanalPanama"
+>> str == str.reverse
+=> false
+>> str.downcase == str.downcase.reverse
+=> true
+
+4. What is the result of selecting element 7 from the range 'a' through 'z'? What about the same range reversed?
+
+>> alphabet = ('a'..'z').to_a
+=> ["a", "b", "c", "d", "e", "f", "g", "h", "i", "j", "k", "l", "m", "n", "o", "p", "q", "r", "s", "t", "u", "v", "w", "x", "y", "z"]
+>> alphabet[7]
+=> "h"
+>> alphabet.reverse[7]
+=> "s"
+
+
+
+
+
+
+
 
 
 
