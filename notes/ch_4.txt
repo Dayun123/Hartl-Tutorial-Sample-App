@@ -474,6 +474,154 @@ Exercises:
 >> alphabet.reverse[7]
 => "s"
 
+# **************************** 4.3.2: Blocks **************************** #
+
+Blocks are one of the most powerful features in Ruby. Here is a simple block:
+
+>> (1..5).each { |i| puts 2 * i }
+2
+4
+6
+8
+10
+=> 1..5
+
+The code above calls the 'each' method for each number in the range, assigning the number to the block variable, 'i', and then running the code in the block once for each member of the range.
+
+You can denote blocks with {} or with do...end. Here is the same block from above but with do...end format:
+
+>> (1..5).each do |i|
+?>   puts 2 * i
+>> end
+2
+4
+6
+8
+10
+=> 1..5
+
+For one-line blocks, curly-braces are the conventional notation, but for multi-line blocks use do...end:
+
+>> (1..5).each do |number|
+?>   puts 2 * number
+>>   puts '--'
+>> end
+2
+--
+4
+--
+6
+--
+8
+--
+10
+--
+=> 1..5
+
+Notice that we can use whatever name we want for the block variable.
+
+Here are a few more methods that take blocks:
+
+>> 3.times { puts 'Beetlejuice' } # .times has no block variable
+Beetlejuice
+Beetlejuice
+Beetlejuice
+=> 3
+>> %w[a b c] # %w creates a string array
+=> ["a", "b", "c"]
+>> %w[a b c].map { |char| char.upcase }
+=> ["A", "B", "C"] # .map runs the block and adds the results to an array
+>> %w[A B C].map { |char| char.downcase }
+=> ["a", "b", "c"]
+>> (1..5).map { |num| num**2 }
+=> [1, 4, 9, 16, 25] # ** is the exponent method
+
+There is an alternate way to use the .map function, using symbol to proc notation:
+
+>> %w[a b c].map(&:upcase)
+=> ["A", "B", "C"]
+>> %w[a b c].map { |char| char.upcase }
+=> ["A", "B", "C"]
+
+Notice how map(&:upcase) is the same as map { |char| char.upcase }
+
+We can now understand this code from chapter 1:
+
+>> ('a'..'z').to_a.shuffle[0..7].join
+=> "qhizrsyb"
+
+We see it as a combination of each method:
+
+# The range
+>> ('a'..'z')
+=> "a".."z"
+# The range converted to an array
+>> ('a'..'z').to_a
+=> ["a", "b", "c", "d", "e", "f", "g", "h", "i", "j", "k", "l", "m", "n", "o", "p", "q", "r", "s", "t", "u", "v", "w", "x", "y", "z"]
+# Range convert to array then shuffled
+>> ('a'..'z').to_a.shuffle
+=> ["h", "j", "r", "z", "k", "f", "a", "n", "x", "i", "p", "d", "e", "m", "g", "u", "w", "y", "t", "q", "l", "o", "b", "s", "c", "v"]
+# Range convert to array, shuffled, then get the first 8 elements
+>> ('a'..'z').to_a.shuffle[0..7]
+=> ["y", "j", "e", "f", "g", "a", "s", "x"]
+# Range convert to array, shuffled, first eight elements as a string
+>> ('a'..'z').to_a.shuffle[0..7].join
+=> "mcfzryxq"
+
+Exercises:
+
+1. Using the range 0..16, print out the first 17 powers of 2:
+
+>> (0..16).each { |i| puts i**2 }
+0
+1
+4
+9
+16
+25
+36
+49
+64
+81
+100
+121
+144
+169
+196
+225
+256
+=> 0..16
+
+2. Define a method called 'yeller' that takes an array of characters and returns a string with an all caps version of the input. Ex:
+
+yeller(%w[h e l l o]) #=> 'HELLO'
+
+>> def yeller(char_arr)
+>>   char_arr.map(&:upcase).join
+>> end
+=> :yeller
+>> yeller(%w[h e l l o])
+=> "HELLO"
+
+3. Define a method called 'random_subdomain' that returns a randomly generated string of eight characters:
+
+>> def random_subdomain
+>>   ('a'..'z').to_a.shuffle[0..7].join
+>> end
+=> :random_subdomain
+>> random_subdomain
+=> "gxydpcwv"
+
+4. Combine split, shuffle, and join to write a function that shuffles the letters in a given string:
+
+>> def string_shuffle(s)
+>>   s.split('').shuffle.join
+>> end
+=> :string_shuffle
+>> string_shuffle('hello')
+=> "hlelo"
+
+
 
 
 
