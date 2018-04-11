@@ -794,8 +794,28 @@ The online API states that .merge will combine the contents of the hash it is ca
 >> { "a" => 100, "b" => 200 }.merge({ "b" => 300 })
 => {"a"=>100, "b"=>300}
 
+# ************************* 4.3.4: CSS Revisited *************************** #
 
+We can now make sense of this line which inserts the CSS into our layout:
 
+<%= stylesheet_link_tag 'application', media: 'all'
+                                       'data-turbolinks-track': 'reload' %>
+
+This is a call to the stylesheet_link_tag function, but it omits the parens, which are optional, the following two function calls are idential:
+
+stylesheet_link_tag('application', media: 'all',
+                                   'data-turbolinks-track': 'reload')
+stylesheet_link_tag 'application', media: 'all'
+                                      'data-turbolinks-track': 'reload'
+
+Also, the media: 'all' part looks like a hash, but there are no braces, because braces are also optional in hashses when they are passed as a function argument as long as they are the last argument of the function. The following two calls to the function are equivalent:
+
+stylesheet_link_tag 'application', { media: 'all'
+                                      'data-turbolinks-track': 'reload }
+stylesheet_link_tag 'application', media: 'all'
+                                      'data-turbolinks-track': 'reload
+
+Finally, we notice that Ruby correctly interprets the function, even though we've split it across two lines. This is because the newlines are ignored inside a function call, so we can split the arguments up on newlines for visual formatting and not mess up the interpreter.
 
 
 
