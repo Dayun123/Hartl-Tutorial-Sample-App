@@ -621,8 +621,178 @@ yeller(%w[h e l l o]) #=> 'HELLO'
 >> string_shuffle('hello')
 => "hlelo"
 
+# ********************* 4.3.3: Hashes and Symbols ************************** #
 
+Hashes are arrays with key->value pairs where the key is not limited to integers.
 
+>> user = {}
+=> {}
+>> user["first_name"] = 'Daniel'
+=> "Daniel"
+>> user
+=> {"first_name"=>"Daniel"}
+>> user['last_name'] = 'Schroeder'
+=> "Schroeder"
+>> user
+=> {"first_name"=>"Daniel", "last_name"=>"Schroeder"}
+>> user['first_name']
+=> "Daniel"
+
+Hashes look similar to arrays, but until Ruby 1.9 they didn't guarantee any particular ordering, so if order matters, use an Array.
+
+Instead of defining hashes one member at a time, you can use the literal notation to define a hash like so:
+
+>> user = { "first_name" => "Ella", "last_name" => "Schroeder" }
+=> {"first_name"=>"Ella", "last_name"=>"Schroeder"}
+
+While you can use strings as keys to your hashes, in Rails it's much more common to use symbols, which are just named values preceded by a colon that don't have as much overhead as strings:
+
+>> 'foo'.length
+=> 3
+>> :foo.length
+=> 3
+>> 'foo'.reverse
+=> "oof"
+>> :foo.reverse
+Traceback (most recent call last):
+        1: from (irb):18
+NoMethodError (undefined method `reverse' for :foo:Symbol)
+>> 'foo'.split('')
+=> ["f", "o", "o"]
+>> :foo.split('')
+Traceback (most recent call last):
+        1: from (irb):20
+NoMethodError (undefined method `split' for :foo:Symbol)
+
+Notice that symbols don't share many of the string methods.
+
+You can use symbols as keys to hashes, and this is very common in Rails:
+
+>> user = { :name => 'Daniel', :email => 'Daniel@aol.com' }
+=> {:name=>"Daniel", :email=>"Daniel@aol.com"}
+>> user[:name]
+=> "Daniel"
+>> user[:password]
+=> nil
+
+Notice that if you try to access a hash key that doesn't exist, the return value is nil.
+
+As of Ruby 1.9, you can define key->value pairs that have a symbol as the key like so:
+
+>> hash1 = { :name => "Daniel", :email => "Man@aol.com" }
+=> {:name=>"Daniel", :email=>"Man@aol.com"}
+>> hash2 = { name: "Daniel", email: "Man@aol.com" }
+=> {:name=>"Daniel", :email=>"Man@aol.com"}
+>> hash1 == hash2
+=> true
+
+So { :name => "Daniel" } is equiv to { name: "Daniel" }
+
+It's important to note that the special key->value use of symbols is only valid inside hashes, you must prepend the colon if you want to use a symbol in any other context.
+
+Hashes can be other hashes:
+
+>> params = {}
+=> {}
+>> params[:user] = { name: "Daniel Schroeder", email: "Man@aol.com" }
+=> {:name=>"Daniel Schroeder", :email=>"Man@aol.com"}
+>> params
+=> {:user=>{:name=>"Daniel Schroeder", :email=>"Man@aol.com"}}
+>> params[:user][:email]
+=> "Man@aol.com"
+
+Hashes respond to the .each method, just like arrays and ranges. The difference is the hash version yeilds a key,value pair to the block:
+
+>> flash = { success: "It worked!", failure: "It failed!" }
+=> {:success=>"It worked!", :failure=>"It failed!"}
+>> flash.each do |key, value|
+?>   puts "Key: #{key.inspect}\tValue: #{value.inspect}"
+>> end
+Key: :success Value: "It worked!"
+Key: :failure Value: "It failed!"
+=> {:success=>"It worked!", :failure=>"It failed!"}
+
+Note the use of the .inspect method, which returns a string with a literal representation of the object it was called on:
+
+>> puts (1..5).to_a
+1
+2
+3
+4
+5
+=> nil
+>> puts (1..5).to_a.inspect
+[1, 2, 3, 4, 5]
+=> nil
+>> puts :name, :name.inspect
+name
+:name
+=> nil
+>> puts "It worked!", "It worked!".inspect
+It worked!
+"It worked!"
+=> nil
+
+Printing values with inspect is so common there's a shortcut for it, 'p':
+
+>> p :user
+:user
+=> :user
+>> p "It worked!"
+"It worked!"
+=> "It worked!"
+>> p (1..5).to_a
+[1, 2, 3, 4, 5]
+=> [1, 2, 3, 4, 5]
+
+Note that 'p' returns the value it gets, where as 'puts' returns nil.
+
+Exercises:
+
+1. Define a hash with the keys ’one’, ’two’, and ’three’, and the values ’uno’, ’dos’, and ’tres’. Iterate over the hash, and for each key/value pair print out "’#{key}’ in Spanish is ’#{value}’:
+
+>> nums = { 'one' => 'uno', 'two' => 'dos', 'three' => 'tres' }
+=> {"one"=>"uno", "two"=>"dos", "three"=>"tres"}
+>> nums.each do |key, value|
+?>   puts "#{key} in Spanish is #{value}"
+>> end
+one in Spanish is uno
+two in Spanish is dos
+three in Spanish is tres
+=> {"one"=>"uno", "two"=>"dos", "three"=>"tres"}
+
+2. Create three hashes called person1, person2, and person3, with first and last names under the keys :first and :last. Then create a params hash so that params[:father] is person1, params[:mother] is person2, and params[:child] is person3. Verify that, for example, params[:father][:first] has the right value:
+
+>> person1 = { first: 'Anakin', last: 'Skywalker' }
+=> {:first=>"Anakin", :last=>"Skywalker"}
+>> person2 = { first: 'Padme', last: 'Amidala' }
+=> {:first=>"Padme", :last=>"Amidala"}
+>> person3 = { first: 'Luke', last: 'Skywalker' }
+=> {:first=>"Luke", :last=>"Skywalker"}
+>> params = {}
+=> {}
+>> params[:father] = person1
+=> {:first=>"Anakin", :last=>"Skywalker"}
+>> params[:mother] = person2
+=> {:first=>"Padme", :last=>"Amidala"}
+>> params[:child] = person3
+=> {:first=>"Luke", :last=>"Skywalker"}
+>> params[:father][:first]
+=> "Anakin"
+
+3. Define a hash with symbol keys corresponding to name, email, and a “password digest”, and values equal to your name, your email address, and a random string of 16 lower-case letters:
+
+>> hash = { name: "Daniel Schroeder", email: "DanielSchroederMusic@gmail.com", password_digest: ('a'..'z').to_a.shuffle[0..15].join }
+=> {:name=>"Daniel Schroeder", :email=>"DanielSchroederMusic@gmail.com", :password_digest=>"fcesljuvmtdbzrwy"}
+
+4. Find an online version of the Ruby API and read about the Hash method merge. What is the value of the following expression?
+
+{ "a" => 100, "b" => 200}.merge({ "b" => 300 })
+
+The online API states that .merge will combine the contents of the hash it is called on with the hash passed in as an argument, and any duplicate values between them will be replaced with the values from the hash in the argument, so the call above will result in the following:
+
+>> { "a" => 100, "b" => 200 }.merge({ "b" => 300 })
+=> {"a"=>100, "b"=>300}
 
 
 
