@@ -818,6 +818,81 @@ stylesheet_link_tag 'application', media: 'all'
 Finally, we notice that Ruby correctly interprets the function, even though we've split it across two lines. This is because the newlines are ignored inside a function call, so we can split the arguments up on newlines for visual formatting and not mess up the interpreter.
 
 
+# ************************ 4.4: Ruby Classes ***************************** #
+
+Everything in Ruby is an object, and objects come from classes, which are used to organize methods. Classes can be instantiated into objects.
+
+# ************************* 4.4.1: Constructors ***************************** #
+
+We've already used classes to instantiate objects, take to literal constructor, the quote characters, which instantiate String objects as an example:
+
+>> s = "foobar"
+=> "foobar"
+>> s.class
+=> String
+
+Notice the call to .class shows that the string is indeed of class String.
+
+We can also use a named constructor, which is equivalent to the literal constructor:
+
+>> s1 = String.new("foobar")
+=> "foobar"
+>> s2 = "foobar"
+=> "foobar"
+>> s1.class
+=> String
+>> s2.class
+=> String
+>> s1 == s2
+=> true
+
+Arrays have literal and named constructors as well, but they are both equivalent just like strings:
+
+>> arr1 = Array.new([2, 3, 4])
+=> [2, 3, 4]
+>> arr2 = [2, 3, 4]
+=> [2, 3, 4]
+>> arr1.class
+=> Array
+>> arr2.class
+=> Array
+>> arr1 == arr2
+=> true
+
+The Hash constructor is a little bit different, in that the named constructor takes as an argument the value that a nonexistent key should return:
+
+>> hash = Hash.new
+=> {}
+>> hash[:nope]
+=> nil
+>> hash = Hash.new(:empty)
+=> {}
+>> hash[:you_here]
+=> :empty
+
+Methods that are called on the class are called class methods, and the 'new' method instantiates an object of the given class. Methods called on instances of a class are called instance methods.
+
+Exercises:
+
+1. What is the literal constructor for the range of integers from 1 to 10?
+
+>> (1..10)
+=> 1..10
+
+2. What is the constructor using the Range class and the new method?
+
+>> Range.new(1, 10)
+=> 1..10
+
+3. Confirm using the == operator that the literal and named constructors from the previous two exercises are identical.
+
+>> (1..10) == Range.new(1, 10)
+=> true
+
+
+
+
+
 
 
 
