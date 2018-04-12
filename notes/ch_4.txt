@@ -1004,6 +1004,77 @@ Exercises:
 >> word.palindrome?
 => true
 
+# ****************** 4.4.3: Modifying Built-in Classes ******************** #
+
+In some cases, inheritance might not be the best option. Take the palindrome? method we created in our Word class that inherited from String. Wouldn't it be nice to just ask any String if it is a palindrome, like so:
+
+"foobar".palindrome?
+
+Ruby allows you to do just this, by opening and modifying the String class like so:
+
+>> class String
+>>   def palindrome?
+>>     self == self.reverse
+>>   end
+>> end
+=> :palindrome?
+>> "deified".palindrome?
+=> true
+
+While technically you can modify the built-in Ruby classes, you should have a really good reason to do so. In web applications, we often want to make sure that a variable contains something other than whitespace, but Ruby doesn't provide a method to do this natively. So, the Rails creators added a method .blank? that checks if a string has characters other than whitespace:
+
+>> "".empty?
+=> true
+>> "".blank?
+=> true
+>> "    ".empty?
+=> false
+>> "    ".blank?
+=> true
+>> nil.empty?
+Traceback (most recent call last):
+        1: from (irb):12
+NoMethodError (undefined method `empty?' for nil:NilClass)
+>> nil.blank?
+=> true
+
+Note that the above example won't work in IRB, since you need the Rails extensions to Ruby present you must use the rails console. Notice that the .blank? method even works on the nil object, which means it must be defined on a superclass of String, since nil is not a string.
+
+1. Verify that “racecar” is a palindrome and “onomatopoeia” is not. What about the name of the South Indian language “Malayalam”? Hint: Downcase it first:
+
+>> "racecar".palindrome?
+=> true
+>> "onomatopoeia".palindrome?
+=> false
+>> "Malayalam".downcase.palindrome?
+=> true
+
+2. Using Listing 4.16 as a guide, add a shuffle method to the String class. Hint: Refer to Listing 4.12:
+
+>> class String
+>>   def shuffle
+>>     self.split('').shuffle.join
+>>   end
+>> end
+=> :shuffle
+>> "hello".shuffle
+=> "lhloe"
+
+3. Verify that the shuffle method works even if you remove self:
+
+>> class String
+>>   def shuffle
+>>     split('').shuffle.join
+>>   end
+>> end
+=> :shuffle
+>> "hello".shuffle
+=> "ohlel"
+
+
+
+
+
 
 
 
