@@ -890,6 +890,120 @@ Exercises:
 => true
 
 
+# ********************* 4.4.2 Class Inheritance ************************** #
+
+We can find out the class hierarchy of a given class using the superclass method:
+
+>> s = String.new('foo')
+=> "foo"
+>> s.class
+=> String
+>> s.class.superclass
+=> Object
+>> s.class.superclass.superclass
+=> BasicObject
+>> s.class.superclass.superclass.superclass
+=> nil
+
+We can see from the above code that the String class has a superclass of Object, and Object's superclass is BasicObject, and then there is nothing above this. Ultimately, everything in Ruby traces back to BasicObject.
+
+To understand classes, it is instructive to make your own. Let's make a Word class that has a method palindrome? that returns ture if the word is a palindrome:
+
+>> class Word
+>>   def palindrome?(string)
+>>     string == string.reverse
+>>   end
+>> end
+=> :palindrome?
+
+We can use this class as follows:
+
+>> word = Word.new
+=> #<Word:0x0000000003b4acf0>
+>> word.palindrome?('foobar')
+=> false
+>> word.palindrome?('level')
+=> true
+
+This example is a bit contrived though. Isn't a Word really just a String? Let's make the Word class inherit from String:
+
+>> class Word < String
+>>   def palindrome?
+>>     self == self.reverse
+>>   end
+>> end
+=> :palindrome?
+
+The line 'Word < String' shows that Word inherits from String, so it will have all the same methods associated with Strings:
+
+>> s = Word.new('level')
+=> "level"
+>> s.palindrome?
+=> true
+>> s.length
+=> 5
+
+Since the Word class inherits from String, we can use the superclass method to see the inheritance hierarchy:
+
+>> s.class
+=> Word
+>> s.class.superclass
+=> String
+>> s.class.superclass.superclass
+=> Object
+>> s.class.superclass.superclass.superclass
+=> BasicObject
+
+Notice in the new definition of the Word class when we want to refer to the Word itself inside the class we use the 'self' keyword:
+
+  self == self.reverse
+
+When you are inside the Word class, since .reverse is a method of the String class, which Word inherits from, you don't have to write self.reverse, you can just do:
+
+  self == reverse
+
+Exercises:
+
+1. What is the class hierarchy for a range? For a hash? For a symbol?
+
+>> range = Range.new(0, 5)
+=> 0..5
+>> range.class
+=> Range
+>> range.class.superclass
+=> Object
+>> range.class.superclass.superclass
+=> BasicObject
+
+>> hash = Hash.new
+=> {}
+>> hash.class.superclass
+=> Object
+>> hash.class.superclass.superclass
+=> BasicObject
+
+>> symbol = :foo
+=> :foo
+>> symbol.class
+=> Symbol
+>> symbol.class.superclass
+=> Object
+>> symbol.class.superclass.superclass
+=> BasicObject
+
+2. Confirm that the method shown in Listing 4.15 works even if we replace self.reverse with just reverse.
+
+>> class Word < String
+>>   def palindrome?
+>>     self == reverse
+>>   end
+>> end
+=> :palindrome?
+>> word = Word.new('level')
+=> "level"
+>> word.palindrome?
+=> true
+
 
 
 
